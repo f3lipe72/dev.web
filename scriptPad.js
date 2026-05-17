@@ -38,18 +38,37 @@ function deleteItem(index) {
 function insertItem(item, index) {
   let tr = document.createElement("tr");
 
-  tr.innerHTML = `
-    <td>${item.desc}</td>
-    <td>R$ ${item.amount}</td>
-    <td class="columnType">${
-      item.type === "Entrada"
-        ? '<i class="bx bxs-chevron-up-circle"></i>'
-        : '<i class="bx bxs-chevron-down-circle"></i>'
-    }</td>
-    <td class="columnAction">
-      <button onclick="deleteItem(${index})"><i class='bx bx-trash'></i></button>
-    </td>
-  `;
+  const tdDesc = document.createElement("td");
+  tdDesc.textContent = item.desc;
+
+  const tdAmount = document.createElement("td");
+  tdAmount.textContent = `R$ ${item.amount}`;
+
+  const tdType = document.createElement("td");
+  tdType.classList.add("columnType");
+
+  const typeIcon = document.createElement("i");
+  typeIcon.classList.add(
+    "bx",
+    item.type === "Entrada"
+      ? "bxs-chevron-up-circle"
+      : "bxs-chevron-down-circle"
+  );
+  tdType.appendChild(typeIcon);
+
+  const tdAction = document.createElement("td");
+  tdAction.classList.add("columnAction");
+
+  const deleteButton = document.createElement("button");
+  deleteButton.type = "button";
+  deleteButton.onclick = () => deleteItem(index);
+
+  const deleteIcon = document.createElement("i");
+  deleteIcon.classList.add("bx", "bx-trash");
+  deleteButton.appendChild(deleteIcon);
+  tdAction.appendChild(deleteButton);
+
+  tr.append(tdDesc, tdAmount, tdType, tdAction);
 
   tbody.appendChild(tr);
 }
@@ -83,9 +102,9 @@ function getTotals() {
 
   const totalItems = (totalIncomes - totalExpenses).toFixed(2);
 
-  incomes.innerHTML = totalIncomes;
-  expenses.innerHTML = totalExpenses;
-  total.innerHTML = totalItems;
+  incomes.textContent = totalIncomes;
+  expenses.textContent = totalExpenses;
+  total.textContent = totalItems;
 }
 
 const getItensBD = () => JSON.parse(localStorage.getItem("db_items")) ?? [];
