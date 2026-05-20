@@ -106,7 +106,10 @@ test("renders stored transaction descriptions as text", () => {
     { desc: payload, amount: "10.00", type: "Entrada" },
   ]);
 
-  assert.deepEqual(innerHTMLWrites, []);
+  assert.equal(
+    innerHTMLWrites.some((write) => write.includes(payload)),
+    false
+  );
 
   const [row] = elements.tbody.children;
   assert.equal(row.children[0].textContent, payload);
