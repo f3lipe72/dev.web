@@ -38,25 +38,44 @@ function deleteItem(index) {
 function insertItem(item, index) {
   let tr = document.createElement("tr");
 
-  tr.innerHTML = `
-    <td>${item.desc}</td>
-    <td>R$ ${item.amount}</td>
-    <td class="columnType">${
-      item.type === "Entrada"
-        ? '<i class="bx bxs-chevron-up-circle"></i>'
-        : '<i class="bx bxs-chevron-down-circle"></i>'
-    }</td>
-    <td class="columnAction">
-      <button onclick="deleteItem(${index})"><i class='bx bx-trash'></i></button>
-    </td>
-  `;
+  const desc = document.createElement("td");
+  desc.textContent = item.desc;
+
+  const amount = document.createElement("td");
+  amount.textContent = `R$ ${item.amount}`;
+
+  const type = document.createElement("td");
+  type.className = "columnType";
+
+  const typeIcon = document.createElement("i");
+  typeIcon.className =
+    item.type === "Entrada"
+      ? "bx bxs-chevron-up-circle"
+      : "bx bxs-chevron-down-circle";
+  type.appendChild(typeIcon);
+
+  const action = document.createElement("td");
+  action.className = "columnAction";
+
+  const button = document.createElement("button");
+  button.addEventListener("click", () => deleteItem(index));
+
+  const trashIcon = document.createElement("i");
+  trashIcon.className = "bx bx-trash";
+  button.appendChild(trashIcon);
+  action.appendChild(button);
+
+  tr.appendChild(desc);
+  tr.appendChild(amount);
+  tr.appendChild(type);
+  tr.appendChild(action);
 
   tbody.appendChild(tr);
 }
 
 function loadItens() {
   items = getItensBD();
-  tbody.innerHTML = "";
+  tbody.textContent = "";
   items.forEach((item, index) => {
     insertItem(item, index);
   });
@@ -83,9 +102,9 @@ function getTotals() {
 
   const totalItems = (totalIncomes - totalExpenses).toFixed(2);
 
-  incomes.innerHTML = totalIncomes;
-  expenses.innerHTML = totalExpenses;
-  total.innerHTML = totalItems;
+  incomes.textContent = totalIncomes;
+  expenses.textContent = totalExpenses;
+  total.textContent = totalItems;
 }
 
 const getItensBD = () => JSON.parse(localStorage.getItem("db_items")) ?? [];
