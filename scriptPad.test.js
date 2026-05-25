@@ -96,5 +96,5 @@ test("transaction descriptions render as text instead of executable HTML", () =>
 
   assert.equal(row.children[0].textContent, payload);
   assert.equal(row.innerHTML, "");
-  assert.equal(row.children[3].children[0].onclick instanceof Function, true);
+  assert.equal(typeof row.children[3].children[0].onclick, "function");
 });
