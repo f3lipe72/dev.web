@@ -36,20 +36,35 @@ function deleteItem(index) {
 }
 
 function insertItem(item, index) {
-  let tr = document.createElement("tr");
+  const tr = document.createElement("tr");
+  const descTd = document.createElement("td");
+  const amountTd = document.createElement("td");
+  const typeTd = document.createElement("td");
+  const actionTd = document.createElement("td");
+  const typeIcon = document.createElement("i");
+  const deleteButton = document.createElement("button");
+  const deleteIcon = document.createElement("i");
 
-  tr.innerHTML = `
-    <td>${item.desc}</td>
-    <td>R$ ${item.amount}</td>
-    <td class="columnType">${
-      item.type === "Entrada"
-        ? '<i class="bx bxs-chevron-up-circle"></i>'
-        : '<i class="bx bxs-chevron-down-circle"></i>'
-    }</td>
-    <td class="columnAction">
-      <button onclick="deleteItem(${index})"><i class='bx bx-trash'></i></button>
-    </td>
-  `;
+  descTd.textContent = item.desc;
+  amountTd.textContent = `R$ ${item.amount}`;
+
+  typeTd.className = "columnType";
+  typeIcon.className =
+    item.type === "Entrada"
+      ? "bx bxs-chevron-up-circle"
+      : "bx bxs-chevron-down-circle";
+  typeTd.appendChild(typeIcon);
+
+  actionTd.className = "columnAction";
+  deleteIcon.className = "bx bx-trash";
+  deleteButton.addEventListener("click", () => deleteItem(index));
+  deleteButton.appendChild(deleteIcon);
+  actionTd.appendChild(deleteButton);
+
+  tr.appendChild(descTd);
+  tr.appendChild(amountTd);
+  tr.appendChild(typeTd);
+  tr.appendChild(actionTd);
 
   tbody.appendChild(tr);
 }
