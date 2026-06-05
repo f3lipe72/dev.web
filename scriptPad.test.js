@@ -58,11 +58,11 @@ class Element {
 
   set innerHTML(value) {
     this._innerHTML = String(value);
-    this._textContent = "";
     this.children = [];
     this.parsedUnsafeHTML = /<script|<img|onerror\s*=|onclick\s*=/i.test(
       this._innerHTML
     );
+    this._textContent = this.parsedUnsafeHTML ? "" : this._innerHTML;
   }
 }
 
