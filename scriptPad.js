@@ -36,27 +36,37 @@ function deleteItem(index) {
 }
 
 function insertItem(item, index) {
-  let tr = document.createElement("tr");
+  const tr = document.createElement("tr");
+  const descTd = document.createElement("td");
+  const amountTd = document.createElement("td");
+  const typeTd = document.createElement("td");
+  const actionTd = document.createElement("td");
+  const typeIcon = document.createElement("i");
+  const deleteButton = document.createElement("button");
+  const deleteIcon = document.createElement("i");
 
-  tr.innerHTML = `
-    <td>${item.desc}</td>
-    <td>R$ ${item.amount}</td>
-    <td class="columnType">${
-      item.type === "Entrada"
-        ? '<i class="bx bxs-chevron-up-circle"></i>'
-        : '<i class="bx bxs-chevron-down-circle"></i>'
-    }</td>
-    <td class="columnAction">
-      <button onclick="deleteItem(${index})"><i class='bx bx-trash'></i></button>
-    </td>
-  `;
+  descTd.textContent = item.desc;
+  amountTd.textContent = `R$ ${item.amount}`;
+  typeTd.className = "columnType";
+  typeIcon.className =
+    item.type === "Entrada"
+      ? "bx bxs-chevron-up-circle"
+      : "bx bxs-chevron-down-circle";
+  actionTd.className = "columnAction";
+  deleteIcon.className = "bx bx-trash";
+  deleteButton.appendChild(deleteIcon);
+  deleteButton.addEventListener("click", () => deleteItem(index));
+
+  typeTd.appendChild(typeIcon);
+  actionTd.appendChild(deleteButton);
+  tr.append(descTd, amountTd, typeTd, actionTd);
 
   tbody.appendChild(tr);
 }
 
 function loadItens() {
   items = getItensBD();
-  tbody.innerHTML = "";
+  tbody.textContent = "";
   items.forEach((item, index) => {
     insertItem(item, index);
   });
@@ -83,9 +93,9 @@ function getTotals() {
 
   const totalItems = (totalIncomes - totalExpenses).toFixed(2);
 
-  incomes.innerHTML = totalIncomes;
-  expenses.innerHTML = totalExpenses;
-  total.innerHTML = totalItems;
+  incomes.textContent = totalIncomes;
+  expenses.textContent = totalExpenses;
+  total.textContent = totalItems;
 }
 
 const getItensBD = () => JSON.parse(localStorage.getItem("db_items")) ?? [];
