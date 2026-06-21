@@ -36,20 +36,35 @@ function deleteItem(index) {
 }
 
 function insertItem(item, index) {
-  let tr = document.createElement("tr");
+  const tr = document.createElement("tr");
+  const tdDesc = document.createElement("td");
+  const tdAmount = document.createElement("td");
+  const tdType = document.createElement("td");
+  const tdAction = document.createElement("td");
+  const typeIcon = document.createElement("i");
+  const deleteButton = document.createElement("button");
+  const deleteIcon = document.createElement("i");
 
-  tr.innerHTML = `
-    <td>${item.desc}</td>
-    <td>R$ ${item.amount}</td>
-    <td class="columnType">${
-      item.type === "Entrada"
-        ? '<i class="bx bxs-chevron-up-circle"></i>'
-        : '<i class="bx bxs-chevron-down-circle"></i>'
-    }</td>
-    <td class="columnAction">
-      <button onclick="deleteItem(${index})"><i class='bx bx-trash'></i></button>
-    </td>
-  `;
+  tdDesc.textContent = item.desc;
+  tdAmount.textContent = `R$ ${item.amount}`;
+
+  tdType.className = "columnType";
+  typeIcon.className =
+    item.type === "Entrada"
+      ? "bx bxs-chevron-up-circle"
+      : "bx bxs-chevron-down-circle";
+  tdType.appendChild(typeIcon);
+
+  tdAction.className = "columnAction";
+  deleteIcon.className = "bx bx-trash";
+  deleteButton.addEventListener("click", () => deleteItem(index));
+  deleteButton.appendChild(deleteIcon);
+  tdAction.appendChild(deleteButton);
+
+  tr.appendChild(tdDesc);
+  tr.appendChild(tdAmount);
+  tr.appendChild(tdType);
+  tr.appendChild(tdAction);
 
   tbody.appendChild(tr);
 }
@@ -83,9 +98,9 @@ function getTotals() {
 
   const totalItems = (totalIncomes - totalExpenses).toFixed(2);
 
-  incomes.innerHTML = totalIncomes;
-  expenses.innerHTML = totalExpenses;
-  total.innerHTML = totalItems;
+  incomes.textContent = totalIncomes;
+  expenses.textContent = totalExpenses;
+  total.textContent = totalItems;
 }
 
 const getItensBD = () => JSON.parse(localStorage.getItem("db_items")) ?? [];
